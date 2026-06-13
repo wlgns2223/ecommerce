@@ -9,17 +9,18 @@ import com.ecommerce.domain.user.required.PasswordEncoder;
 import com.ecommerce.domain.user.vo.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserModifyingService implements UserRegister {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
+    @Transactional
     public User register(UserRegisterRequest registerRequest) {
 
         checkDuplicateEmail(registerRequest);

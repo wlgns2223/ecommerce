@@ -1,4 +1,4 @@
-package com.ecommerce.adapter.webApi.user;
+package com.ecommerce.adapter.webApi.user.mapper;
 
 import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.domain.user.entity.User;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-13T20:24:19+0900",
+    date = "2026-06-13T20:42:37+0900",
     comments = "version: 1.6.3, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.14.5.jar, environment: Java 17.0.19 (Amazon.com Inc.)"
 )
 @Component

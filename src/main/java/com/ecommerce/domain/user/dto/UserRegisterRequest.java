@@ -10,7 +10,7 @@ public record UserRegisterRequest(
         @Email
         String email,
         @NotBlank
-        @Size(min = 4)
+        @Size(min = 4, max = 64)
         String password,
         @NotBlank
         String nickname,

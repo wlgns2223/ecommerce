@@ -1,4 +1,4 @@
-package com.ecommerce.adapter.webApi.user;
+package com.ecommerce.adapter.webApi.user.mapper;
 
 import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.domain.user.entity.User;
