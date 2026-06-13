@@ -43,17 +43,8 @@ _Aggregate Root_
 - `nickname`: 이름,
 - `phone`: 휴대폰 번호,
 - `status`: `UserStatus` 회원상태
-- `Role`: `ROLE` 1:1
+- `Role`: `ROLE`
 - `UserDetail`: `UserDetail` 1:1
-
-### ROLE
-
-#### 역할
-
-_Enttiy_
-
-- `role_code`: `Role` 역할, unique
-- `role_name`: 역할 이름. 회원, 관리자
 
 ### Role
 

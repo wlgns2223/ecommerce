@@ -9,10 +9,10 @@ CREATE TABLE user_tiers
 );
 
 INSERT INTO user_tiers (tier_code, tier_name)
-VALUES ('basic', '일반');
+VALUES ('BASIC', '일반');
 INSERT INTO user_tiers (tier_code, tier_name)
-VALUES ('silver', '실버');
+VALUES ('SILVER', '실버');
 INSERT INTO user_tiers (tier_code, tier_name)
-VALUES ('gold', '골드');
+VALUES ('GOLD', '골드');
 INSERT INTO user_tiers (tier_code, tier_name)
-VALUES ('platinum', '플래티넘');
+VALUES ('PLATINUM', '플래티넘');
