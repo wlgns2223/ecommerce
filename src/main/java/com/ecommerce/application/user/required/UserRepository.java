@@ -1,4 +1,4 @@
-package com.ecommerce.application.required;
+package com.ecommerce.application.user.required;
 
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.vo.Email;

@@ -3,7 +3,7 @@ package com.ecommerce.adapter.webApi.auth;
 import com.ecommerce.adapter.webApi.common.ApiResponse;
 import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.adapter.webApi.user.mapper.UserMapper;
-import com.ecommerce.application.provided.UserRegister;
+import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
 import jakarta.validation.Valid;

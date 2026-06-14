@@ -1,7 +1,7 @@
 package com.ecommerce.application.user;
 
-import com.ecommerce.application.provided.UserRegister;
-import com.ecommerce.application.required.UserRepository;
+import com.ecommerce.application.user.provided.UserRegister;
+import com.ecommerce.application.user.required.UserRepository;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.exception.DuplicatedEmailException;

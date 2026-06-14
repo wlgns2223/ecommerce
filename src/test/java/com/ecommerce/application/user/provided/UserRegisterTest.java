@@ -1,6 +1,5 @@
 package com.ecommerce.application.user.provided;
 
-import com.ecommerce.application.provided.UserRegister;
 import com.ecommerce.config.TestConfig;
 import com.ecommerce.domain.UserFixture;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
