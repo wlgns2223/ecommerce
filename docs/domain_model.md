@@ -172,9 +172,19 @@ _Entity_ , _Aggregate root_
 - `minOrderQty`: 최소 주문 수량
 - `maxOrderQty`: 최대 주문 수량
 - `status`: `ProductStatus` 상품 상태
-- `thumbnailUrl`: 썸네일
 - `optionGroups`: `OptionGroup`
 - `ProductSku`: `ProductSku`
+
+#### ProductSku
+
+_Entity_
+
+#### 속성
+
+- `skuCode`: sku 코드
+- `price`: 가격
+- `stock`: 재고
+- `OptionValue`: `OptionValue` 옵션 값 ( 재고관리 단위 )
 
 #### OptionGroups
 
