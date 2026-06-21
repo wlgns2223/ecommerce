@@ -1,4 +1,4 @@
-package com.ecommerce.domain.common;
+package com.ecommerce.domain.shared;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -29,6 +29,9 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(updatable = false, nullable = false)
     LocalDateTime updatedAt;
+
+    @Column
+    LocalDateTime deletedAt;
 
     @Override
     public final boolean equals(Object o) {

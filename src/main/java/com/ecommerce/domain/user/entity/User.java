@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.entity;
 
-import com.ecommerce.domain.common.BaseEntity;
+import com.ecommerce.domain.shared.BaseEntity;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.enums.UserStatus;
 import com.ecommerce.domain.user.required.PasswordEncoder;
@@ -8,14 +8,14 @@ import com.ecommerce.domain.user.vo.Email;
 import com.ecommerce.domain.user.vo.Nickname;
 import com.ecommerce.domain.user.vo.Phone;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.*;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,6 +26,8 @@ import static java.util.Objects.requireNonNull;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 
     @Embedded

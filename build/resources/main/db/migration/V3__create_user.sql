@@ -8,8 +8,9 @@ CREATE TABLE users
     status     VARCHAR(255) NOT NULL,
     role       VARCHAR(255) NOT NULL DEFAULT 'USER',
     detail_id  BIGINT       NOT NULL,
-    created_at TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP    NULL     DEFAULT NULL,
     CONSTRAINT uk_email UNIQUE (email),
     CONSTRAINT fk_user_detail_id FOREIGN KEY (detail_id) REFERENCES user_details (id)
 );

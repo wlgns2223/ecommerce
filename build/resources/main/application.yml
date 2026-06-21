@@ -17,3 +17,6 @@ spring:
     secret: test-secret-key-that-is-at-least-32bytes-long-very-strong
     access-token-seconds: 1800
     refresh-token-seconds: 1209600
+    cookie:
+      access-name: access
+      refresh-name: refresh

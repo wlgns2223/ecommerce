@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.entity;
 
-import com.ecommerce.domain.common.BaseEntity;
+import com.ecommerce.domain.shared.BaseEntity;
 import com.ecommerce.domain.user.enums.TierCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

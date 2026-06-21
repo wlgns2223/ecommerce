@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.entity;
 
-import com.ecommerce.domain.common.BaseEntity;
+import com.ecommerce.domain.shared.BaseEntity;
 import com.ecommerce.domain.user.dto.UserDetailCreateRequest;
 import com.ecommerce.domain.user.enums.Gender;
 import com.ecommerce.domain.user.enums.TierCode;
@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 
@@ -22,6 +24,8 @@ import java.time.LocalDate;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "user_details")
+@SQLDelete(sql = "UPDATE user_details SET deleted_at = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 public class UserDetail extends BaseEntity {
 
     @Column(nullable = false)

@@ -26,9 +26,9 @@ public class JwtTokenProvider implements TokenProvider {
     private final Long accessTokenSeconds;
     private final Long refreshTokenSeconds;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String key,
-                            @Value("${jwt.access-token-seconds}") Long accessTokenSeconds,
-                            @Value("${jwt.refresh-token-seconds}") Long refreshTokenSeconds) {
+    public JwtTokenProvider(@Value("${spring.jwt.secret}") String key,
+                            @Value("${spring.jwt.access-token-seconds}") Long accessTokenSeconds,
+                            @Value("${spring.jwt.refresh-token-seconds}") Long refreshTokenSeconds) {
         this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         this.accessTokenSeconds = accessTokenSeconds;
         this.refreshTokenSeconds = refreshTokenSeconds;
