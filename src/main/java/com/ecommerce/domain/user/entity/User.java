@@ -3,7 +3,7 @@ package com.ecommerce.domain.user.entity;
 import com.ecommerce.domain.shared.BaseEntity;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.enums.UserStatus;
-import com.ecommerce.domain.user.required.PasswordEncoder;
+import com.ecommerce.domain.user.required.Encoder;
 import com.ecommerce.domain.user.vo.Email;
 import com.ecommerce.domain.user.vo.Nickname;
 import com.ecommerce.domain.user.vo.Phone;
@@ -60,13 +60,13 @@ public class User extends BaseEntity {
         this.detail = detail;
     }
 
-    public static User create(UserRegisterRequest request, PasswordEncoder passwordEncoder) {
+    public static User create(UserRegisterRequest request, Encoder encoder) {
         String rawPassword = requireNonNull(request.password());
         validatePassword(rawPassword);
 
         User user = new User();
         user.email = new Email(requireNonNull(request.email()));
-        user.password = passwordEncoder.encode(rawPassword);
+        user.password = encoder.encode(rawPassword);
         user.nickname = new Nickname(requireNonNull(request.nickname()));
         user.phone = new Phone(requireNonNull(request.phone()));
         user.status = UserStatus.ACTIVE;

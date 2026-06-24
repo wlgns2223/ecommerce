@@ -1,12 +1,12 @@
 package com.ecommerce.adapter.security;
 
-import com.ecommerce.domain.user.required.PasswordEncoder;
+import com.ecommerce.domain.user.required.Encoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class SecurePasswordEncoder implements PasswordEncoder {
+public class SecureEncoder implements Encoder {
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override

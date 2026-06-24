@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SecurePasswordEncoderTest {
+class SecureEncoderTest {
 
     @Test
     @DisplayName("인코딩된 패스워드가 일치한다")
     void matches() {
         // given
-        SecurePasswordEncoder encoder = new SecurePasswordEncoder();
+        SecureEncoder encoder = new SecureEncoder();
         String raw = "password";
 
         // when

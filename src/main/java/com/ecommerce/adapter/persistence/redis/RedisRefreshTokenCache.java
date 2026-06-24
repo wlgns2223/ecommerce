@@ -1,6 +1,6 @@
 package com.ecommerce.adapter.persistence.redis;
 
-import com.ecommerce.application.auth.required.RefreshTokenStore;
+import com.ecommerce.application.auth.required.RefreshTokenCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.lang.NonNull;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class RedisRefreshTokenStore implements RefreshTokenStore {
+public class RedisRefreshTokenCache implements RefreshTokenCache {
 
     private static final String PREFIX = "refresh:";
     private final StringRedisTemplate redisTemplate;

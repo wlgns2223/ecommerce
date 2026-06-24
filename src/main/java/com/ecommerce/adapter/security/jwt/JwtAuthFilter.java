@@ -1,5 +1,6 @@
 package com.ecommerce.adapter.security.jwt;
 
+import com.ecommerce.domain.auth.required.IssuedToken;
 import com.ecommerce.domain.user.enums.Role;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -36,16 +37,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = resolveCookie(request);
         if (token != null && jwtTokenProvider.isAccessToken(token)) {
-            Claims claims = jwtTokenProvider.parseClaim(token);
-            String email = claims.getSubject();
+            IssuedToken claims = jwtTokenProvider.parseToken(token);
 
-            List<String> roles = claims.get("roles", List.class);
+            List<String> roles = claims.roles().stream().map(Enum::name).toList();
             List<SimpleGrantedAuthority> authorities = roles.stream()
                     .map(Role::valueOf)
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                     .toList();
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, authorities);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(claims.email(), null, authorities);
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

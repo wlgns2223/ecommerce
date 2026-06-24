@@ -1,5 +1,6 @@
 package com.ecommerce.application.user.provided;
 
+import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
 

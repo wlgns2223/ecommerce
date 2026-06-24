@@ -19,4 +19,8 @@ public record Email(
             throw new IllegalArgumentException("이메일 형식이 바르지 않습니다: " + address);
         }
     }
+
+    public static Email of(String email){
+        return new Email(email);
+    }
 }
