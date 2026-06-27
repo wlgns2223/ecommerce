@@ -7,13 +7,19 @@ import com.ecommerce.domain.user.required.Encoder;
 
 public class UserFixture {
 
-    public static UserLoginRequest createLoginRequest(){
-        return new UserLoginRequest("foo@gmail.com", "password");
+    private static final String PASSWORD = "password";
+
+    public static UserLoginRequest createLoginRequest(String email) {
+        return createLoginRequest(email, PASSWORD);
+    }
+
+    public static UserLoginRequest createLoginRequest(String email, String password) {
+        return new UserLoginRequest(email, password, "device-1");
     }
 
     public static UserRegisterRequest createUserRegisterRequest(String email) {
         return new UserRegisterRequest(email,
-                "password",
+                PASSWORD,
                 "foo",
                 "01012341234",
                 UserDetailFixture.createUserDetailRequest()

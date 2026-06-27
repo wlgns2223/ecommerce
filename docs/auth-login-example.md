@@ -17,6 +17,7 @@ private String resolveCookie(HttpServletRequest request) { ... }   // 쿠키에�
 → 따라서 **로그인은 토큰을 응답 바디가 아니라 `Set-Cookie`로 내려줘야** 필터가 다음 요청에서 인증을 복원할 수 있다. (헤더 방식 예제와 다른 점)
 
 관련 보안 설정(`SecurityConfig`):
+
 - `/api/auth/**` → `permitAll` (로그인은 인증 불필요)
 - `SessionCreationPolicy.STATELESS`
 - CSRF는 쿠키 저장소 사용 + `/api/auth/**`는 무시
@@ -43,6 +44,7 @@ AuthApi(login)              ← adapter.webApi.auth     : HTTP 입력 + 쿠키 �
 ## 2. 선행 변경 2가지
 
 ### (1) `UserRepository`에 `findByEmail` 추가
+
 현재는 `existsByEmail`만 있다. 로그인엔 사용자 조회가 필요하다.
 
 ```java
@@ -54,7 +56,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ```
 
 ### (2) 인증 실패 예외 (Spring Security 타입 금지)
-core에서 `org.springframework.security.authentication.BadCredentialsException`을 쓰면 도메인/애플리케이션에 Spring Security가 누출된다. 기존 `DuplicatedEmailException` 스타일로 자체 예외를 만든다.
+
+core에서 `org.springframework.security.authentication.BadCredentialsException`을 쓰면 도메인/애플리케이션에 Spring Security가 누출된다. 기존
+`DuplicatedEmailException` 스타일로 자체 예외를 만든다.
 
 ```java
 // domain/user/exception/InvalidCredentialsException.java
@@ -62,6 +66,7 @@ public class InvalidCredentialsException extends RuntimeException {
     public InvalidCredentialsException(String message) { super(message); }
 }
 ```
+
 > 이 예외를 401로 변환하는 `@RestControllerAdvice`는 별도로 둔다(아래 8번 참고).
 
 ---
@@ -95,7 +100,7 @@ package com.ecommerce.application.auth;
 
 import com.ecommerce.application.auth.provided.AuthUseCase;
 import com.ecommerce.application.auth.provided.Tokens;
-import com.ecommerce.application.auth.required.RefreshTokenCache;
+import com.ecommerce.application.auth.required.CacheStore;
 import com.ecommerce.application.auth.required.TokenProvider;
 import com.ecommerce.application.user.required.UserRepository;
 import com.ecommerce.domain.user.entity.User;
@@ -311,8 +316,12 @@ spring:
 
 ## 9. 주의점 · 남은 갭
 
-- **역할(Role) 저장 부재**: `User`에 Role 필드가 없어 예제는 `List.of(Role.USER)` 고정. ADMIN을 쓰려면 역할 저장을 도입하고 `AuthService`의 roles를 교체해야 한다.
-- **`InvalidCredentialsException` → 401 매핑**: `@RestControllerAdvice`에서 이 예외를 잡아 `ApiResponse.fail(HttpStatus.UNAUTHORIZED, ...)`로 변환한다. (안 하면 500)
-- **`AuthenticationManager` 빈**: `SecurityConfig`에 선언돼 있지만 `UserDetailsService`가 없어 현재 동작 불가/미사용. 위처럼 포트 기반 자체 인증으로 가면 이 빈은 제거해도 된다.
+- **역할(Role) 저장 부재**: `User`에 Role 필드가 없어 예제는 `List.of(Role.USER)` 고정. ADMIN을 쓰려면 역할 저장을 도입하고 `AuthService`의 roles를 교체해야
+  한다.
+- **`InvalidCredentialsException` → 401 매핑**: `@RestControllerAdvice`에서 이 예외를 잡아
+  `ApiResponse.fail(HttpStatus.UNAUTHORIZED, ...)`로 변환한다. (안 하면 500)
+- **`AuthenticationManager` 빈**: `SecurityConfig`에 선언돼 있지만 `UserDetailsService`가 없어 현재 동작 불가/미사용. 위처럼 포트 기반 자체 인증으로 가면 이
+  빈은 제거해도 된다.
 - **`secure(true)` / `SameSite`**: 운영(HTTPS) 기준. 로컬 HTTP 개발에선 `secure(false)`, 프론트가 다른 출처면 `SameSite=None`이 필요할 수 있다.
-- **로그인 시 잘못된 이메일 형식**: `new Email(email)` VO 검증에서 `IllegalArgumentException`이 날 수 있다. 자격 증명 오류로 통일하려면 컨트롤러/어드바이스에서 함께 처리.
+- **로그인 시 잘못된 이메일 형식**: `new Email(email)` VO 검증에서 `IllegalArgumentException`이 날 수 있다. 자격 증명 오류로 통일하려면 컨트롤러/어드바이스에서 함께
+  처리.

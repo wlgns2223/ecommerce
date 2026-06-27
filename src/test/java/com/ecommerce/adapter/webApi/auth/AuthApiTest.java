@@ -1,8 +1,8 @@
 package com.ecommerce.adapter.webApi.auth;
 
-import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.config.TestContainerConfiguration;
 import com.ecommerce.domain.UserFixture;
+import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,10 +17,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,7 +33,7 @@ class AuthApiTest {
 
     @Test
     @DisplayName("register api")
-    void register() throws JsonProcessingException, UnsupportedEncodingException {
+    void register() throws JsonProcessingException {
         // given
         UserRegisterRequest request = UserFixture.createUserRegisterRequest("foo@email.com");
         String requestJson = objectMapper.writeValueAsString(request);
@@ -58,5 +55,32 @@ class AuthApiTest {
 
     }
 
+    @Test
+    @DisplayName("로그인")
+    void login() throws JsonProcessingException {
+        // given
+        String email = "test@gmail.com";
+        String password = "password";
+        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email, password);
+        String registerRequestJson = objectMapper.writeValueAsString(registerRequest);
 
+        mockMvcTester.post().uri("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerRequestJson)
+                .exchange();
+
+        UserLoginRequest request = UserFixture.createLoginRequest(email, password);
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        // when
+        MvcTestResult result = mockMvcTester.post().uri("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .exchange();
+        // then
+        assertThat(result).hasStatusOk().cookies()
+                .containsCookie("access_token")
+                .containsCookie("refresh_token");
+
+    }
 }

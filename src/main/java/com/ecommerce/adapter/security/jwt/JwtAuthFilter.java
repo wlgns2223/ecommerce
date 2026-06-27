@@ -1,13 +1,15 @@
 package com.ecommerce.adapter.security.jwt;
 
-import com.ecommerce.domain.auth.required.IssuedToken;
-import com.ecommerce.domain.user.enums.Role;
-import io.jsonwebtoken.Claims;
+import com.ecommerce.domain.auth.dto.IssuedToken;
+import com.ecommerce.domain.auth.enums.TokenType;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,8 +21,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+    public static final String JWT_ERROR = "jwt.error";
+
+    public enum JwtError {EXPIRED, INVALID,}
 
     private final JwtTokenProvider jwtTokenProvider;
     private final String accessCookieName;
@@ -36,18 +43,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = resolveCookie(request);
-        if (token != null && jwtTokenProvider.isAccessToken(token)) {
-            IssuedToken claims = jwtTokenProvider.parseToken(token);
+        if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                IssuedToken issuedToken = jwtTokenProvider.parseToken(token);
+                if (issuedToken.tokenType().equals(TokenType.ACCESS)) {
+                    List<SimpleGrantedAuthority> authorities = issuedToken.roles().stream()
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                            .toList();
 
-            List<String> roles = claims.roles().stream().map(Enum::name).toList();
-            List<SimpleGrantedAuthority> authorities = roles.stream()
-                    .map(Role::valueOf)
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                    .toList();
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(issuedToken.email(), null, authorities);
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(claims.email(), null, authorities);
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } catch (ExpiredJwtException e) {
+                log.info("access token expired");
+                request.setAttribute(JWT_ERROR, JwtError.EXPIRED);
+            } catch (JwtException e) {
+                log.info("Invalid jwt");
+                request.setAttribute(JWT_ERROR, JwtError.INVALID);
+
+            }
+
+
         }
 
         filterChain.doFilter(request, response);

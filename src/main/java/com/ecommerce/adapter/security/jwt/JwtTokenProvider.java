@@ -1,10 +1,15 @@
 package com.ecommerce.adapter.security.jwt;
 
 import com.ecommerce.application.auth.required.TokenProvider;
+import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.enums.TokenType;
-import com.ecommerce.domain.auth.required.IssuedToken;
+import com.ecommerce.domain.auth.exception.InvalidTokenException;
+import com.ecommerce.domain.auth.exception.TokenExpiredException;
 import com.ecommerce.domain.user.enums.Role;
+import com.ecommerce.domain.user.vo.Email;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +18,9 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class JwtTokenProvider implements TokenProvider {
@@ -38,16 +43,17 @@ public class JwtTokenProvider implements TokenProvider {
         this.refreshTokenSeconds = refreshTokenSeconds;
     }
 
-     public IssuedToken createAccessToken(String email,String deviceId,Instant now) {
-         return createAccessToken(email, List.of(Role.USER),deviceId, now);
+    public IssuedToken createAccessToken(Email email, String deviceId, Instant now) {
+        return createAccessToken(email, List.of(Role.USER), deviceId, now);
     }
 
-    public IssuedToken createAccessToken(String email, List<Role> roles, String deviceId ,Instant now) {
+    public IssuedToken createAccessToken(Email email, List<Role> roles, String deviceId, Instant now) {
 
         long accessTokenMilliSeconds = accessTokenSeconds * ONE_SECOND_IN_MILLI;
         Date expiry = new Date(Date.from(now).getTime() + accessTokenMilliSeconds);
         String token = Jwts.builder()
-                .subject(email)
+                .id(UUID.randomUUID().toString())
+                .subject(email.address())
                 .claim(TOKEN_TYPE, TokenType.ACCESS.name())
                 .claim(ROLES, roles)
                 .claim(DEVICE_ID, deviceId)
@@ -67,11 +73,12 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public IssuedToken createRefreshToken(String email, List<Role> roles, String deviceId, Instant now) {
+    public IssuedToken createRefreshToken(Email email, List<Role> roles, String deviceId, Instant now) {
         long refreshTokenMilliSeconds = refreshTokenSeconds * ONE_SECOND_IN_MILLI;
         Date expiry = new Date(Date.from(now).getTime() + refreshTokenMilliSeconds);
         String token = Jwts.builder()
-                .subject(email)
+                .id(UUID.randomUUID().toString())
+                .subject(email.address())
                 .claim(TOKEN_TYPE, TokenType.REFRESH.name())
                 .claim(ROLES, roles)
                 .claim(DEVICE_ID, deviceId)
@@ -90,33 +97,26 @@ public class JwtTokenProvider implements TokenProvider {
                 .build();
     }
 
-    public IssuedToken createRefreshToken(String email, String deviceId, Instant now) {
+    public IssuedToken createRefreshToken(Email email, String deviceId, Instant now) {
         return createRefreshToken(email, List.of(Role.USER), deviceId, now);
     }
 
     public IssuedToken parseToken(String token) {
-        Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
-        return IssuedToken.builder()
-                .email(claims.getSubject())
-                .tokenType(claims.get(TOKEN_TYPE,TokenType.class))
-                .deviceId(claims.get(DEVICE_ID, String.class))
-                .roles(claims.get(ROLES, List.class))
-                .token(token)
-                .expiresAt(claims.getExpiration().toInstant())
-                .build();
-    }
-
-    public boolean validate(String token) {
         try {
-            parseToken(token);
-            return true;
-
-        } catch (Exception e) {
-            return false;
+            Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+            List<String> roleNames = claims.get(ROLES, List.class);
+            return IssuedToken.builder()
+                    .email(new Email(claims.getSubject()))
+                    .tokenType(TokenType.valueOf(claims.get(TOKEN_TYPE, String.class)))
+                    .deviceId(claims.get(DEVICE_ID, String.class))
+                    .roles(roleNames.stream().map(Role::valueOf).toList())
+                    .token(token)
+                    .expiresAt(claims.getExpiration().toInstant())
+                    .build();
+        } catch (ExpiredJwtException e) {
+            throw new TokenExpiredException(e.getMessage());
+        } catch (JwtException e) {
+            throw new InvalidTokenException(e.getMessage());
         }
-    }
-
-    public boolean isAccessToken(String token) {
-        return validate(token) && TokenType.ACCESS.equals(parseToken(token).tokenType());
     }
 }

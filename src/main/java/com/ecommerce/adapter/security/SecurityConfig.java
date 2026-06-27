@@ -51,19 +51,37 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception ->
                         exception.authenticationEntryPoint(((request, response, authException) -> {
+                            Object jwtError = request.getAttribute(JwtAuthFilter.JWT_ERROR);
+
+                            String code = "UNAUTHORIZED";
+                            String message = "auth failed";
+
+                            if (jwtError == JwtAuthFilter.JwtError.EXPIRED) {
+                                code = "TOKEN_EXPIRED";
+                                message = "access token expired";
+                                response.setHeader("X-Auth-Error", "token_expired");
+                            } else if (jwtError == JwtAuthFilter.JwtError.INVALID) {
+                                code = "INVALID_TOKEN";
+                                message = "invalid token";
+                            }
+
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json;charset=UTF-8");
+
                             ApiResponse<Void> error = ApiResponse.<Void>builder()
-                                    .error(ApiResponse.Error.of("UNAUTHORIZED", "auth failed"))
+                                    .error(ApiResponse.Error.of(code, message))
                                     .build();
                             response.getWriter().write(objectMapper.writeValueAsString(error));
+
                         })).accessDeniedHandler(((request, response, accessDeniedException) -> {
+
                             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                             response.setContentType("application/json;charset=UTF-8");
                             ApiResponse<Void> error = ApiResponse.<Void>builder()
-                                    .error(ApiResponse.Error.of("FORBIDDEN", "auth failed"))
+                                    .error(ApiResponse.Error.of("FORBIDDEN", "access denied"))
                                     .build();
                             response.getWriter().write(objectMapper.writeValueAsString(error));
+
                         }))
 
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

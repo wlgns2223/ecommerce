@@ -10,13 +10,15 @@ CREATE TABLE products
     description   TEXT           NULL,
     model_number  VARCHAR(255)   NOT NULL CHECK ( TRIM(model_number) <> '' ),
     seller_id     BIGINT         NOT NULL,
-    sale_unit     VARCHAR(255)   NULL, # 판매단위 표시
-    min_order_qty INT            NOT NULL DEFAULT 1,
-    max_order_qty INT            NOT NULL DEFAULT 9999,
-    order_unit    INT            NOT NULL DEFAULT 1 CHECK ( order_unit >= 1 ),
+    sale_unit     VARCHAR(255)   NULL,                                         # 판매단위 표시
+    min_order_qty INT            NOT NULL DEFAULT 1 CHECK ( min_order_qty >= 1 ),
+    max_order_qty INT            NOT NULL DEFAULT 9999 CHECK ( max_order_qty <= 9999 ),
+    order_unit    INT            NOT NULL DEFAULT 1 CHECK ( order_unit >= 1 ), # 묶음판매
     status        VARCHAR(255)   NOT NULL DEFAULT 'DRAFT' CHECK ( status IN ('DRAFT', 'ON_SALE', 'SUSPENDED', 'RESERVED', 'DISCONTINUED')),
     deleted_at    TIMESTAMP      NULL,
     created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_seller_id FOREIGN KEY (seller_id) REFERENCES users (id)
+    CONSTRAINT fk_seller_id FOREIGN KEY (seller_id) REFERENCES users (id),
+    CONSTRAINT chk_min_max_qty CHECK ( min_order_qty <= max_order_qty ),
+    CONSTRAINT chk_min_qty_order_unit CHECK ( MOD(min_order_qty, order_unit) = 0 )
 )
