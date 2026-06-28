@@ -8,19 +8,21 @@ import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.entity.RefreshToken;
 import com.ecommerce.domain.auth.enums.TokenType;
+import com.ecommerce.domain.auth.exception.AuthenticationException;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.entity.User;
-import com.ecommerce.domain.user.exception.UnauthorizedException;
 import com.ecommerce.domain.user.required.Encoder;
 import com.ecommerce.domain.user.vo.Email;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticatorService implements Authenticator {
@@ -34,10 +36,10 @@ public class AuthenticatorService implements Authenticator {
     @Transactional
     public TokenResult login(UserLoginRequest loginRequest) {
         User user = userRepository.findByEmail(Email.of(loginRequest.email()))
-                .orElseThrow(() -> new UnauthorizedException("잘못된 이메일 및 패스워드입니다."));
+                .orElseThrow(() -> new AuthenticationException("잘못된 이메일 및 패스워드입니다."));
 
         if (!encoder.matches(loginRequest.password(), user.getPassword())) {
-            throw new UnauthorizedException("잘못된 이메일 및 패스워드입니다.");
+            throw new AuthenticationException("잘못된 이메일 및 패스워드입니다.");
         }
 
         return issueAccessAndRefreshToken(loginRequest, user);
@@ -70,5 +72,18 @@ public class AuthenticatorService implements Authenticator {
         refreshStore.save(issuedRefreshToken, refreshToken.getUserId());
 
         return new TokenResult(issuedAccessToken, issuedRefreshToken);
+    }
+
+    @Override
+    @Transactional
+    public void logout(String rawRefreshToken) {
+        
+        try {
+            RefreshToken refreshToken = refreshStore.validate(rawRefreshToken);
+            refreshToken.revoke(LocalDateTime.now());
+        } catch (InvalidTokenException e) {
+            log.warn(e.getMessage());
+        }
+
     }
 }

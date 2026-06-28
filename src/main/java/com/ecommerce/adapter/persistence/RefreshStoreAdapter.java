@@ -39,7 +39,6 @@ public class RefreshStoreAdapter implements RefreshStore {
     @Transactional
     public RefreshToken validate(String rawRefreshToken) {
         String hashed = tokenHasher.hash(rawRefreshToken);
-
         return refreshTokenRepository.findByTokenHashAndExpiresAtAfterForUpdate(hashed, LocalDateTime.now())
                 .orElseThrow(() -> new InvalidTokenException("토큰을 찾을 수 없습니다."));
     }

@@ -8,4 +8,6 @@ public interface Authenticator {
     TokenResult login(UserLoginRequest loginRequest);
 
     TokenResult renew(String refreshToken);
+
+    void logout(String refreshToken);
 }

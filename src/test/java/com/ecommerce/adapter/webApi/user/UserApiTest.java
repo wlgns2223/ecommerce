@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class AuthApiTest {
+class UserApiTest {
 
     @Autowired
     MockMvcTester mockMvcTester;
