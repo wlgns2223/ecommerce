@@ -27,7 +27,7 @@ public class Category extends BaseEntity {
     String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id") // root는 null
     Category parent;
 
     @Embedded
@@ -35,5 +35,8 @@ public class Category extends BaseEntity {
 
     @Column(nullable = false)
     Boolean isActive;
+
+    @Column(nullable = false)
+    Integer level;
 
 }
