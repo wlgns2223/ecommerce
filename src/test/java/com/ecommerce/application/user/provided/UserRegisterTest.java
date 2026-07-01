@@ -7,7 +7,7 @@ import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.enums.TierCode;
 import com.ecommerce.domain.user.enums.UserStatus;
 import com.ecommerce.domain.user.exception.DuplicatedEmailException;
-import com.ecommerce.domain.user.required.Encoder;
+import com.ecommerce.domain.user.required.PasswordEncoder;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class UserRegisterTest {
     EntityManager entityManager;
 
     @Autowired
-    Encoder encoder;
+    PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("유저를 생성한다.")
@@ -47,7 +47,7 @@ class UserRegisterTest {
 
         //then
         assertThat(user.getId()).isNotNull();
-        assertThat(encoder.matches(password, user.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches(password, user.getPassword())).isTrue();
         assertThat(user.getStatus()).isEqualTo(UserStatus.ACTIVE);
         assertThat(user.getDetail().getTierCode()).isEqualTo(TierCode.BASIC);
     }

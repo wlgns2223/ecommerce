@@ -5,6 +5,7 @@ import com.ecommerce.application.auth.required.RefreshStore;
 import com.ecommerce.application.auth.required.TokenProvider;
 import com.ecommerce.application.user.required.UserRepository;
 import com.ecommerce.domain.auth.dto.IssuedToken;
+import com.ecommerce.domain.auth.dto.request.UserDeleteRequestDto;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.entity.RefreshToken;
 import com.ecommerce.domain.auth.enums.TokenType;
@@ -12,7 +13,7 @@ import com.ecommerce.domain.auth.exception.AuthenticationException;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.entity.User;
-import com.ecommerce.domain.user.required.Encoder;
+import com.ecommerce.domain.user.required.PasswordEncoder;
 import com.ecommerce.domain.user.vo.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ import java.time.LocalDateTime;
 public class AuthenticatorService implements Authenticator {
 
     private final UserRepository userRepository;
-    private final Encoder encoder;
+    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshStore refreshStore;
 
@@ -38,7 +39,7 @@ public class AuthenticatorService implements Authenticator {
         User user = userRepository.findByEmail(Email.of(loginRequest.email()))
                 .orElseThrow(() -> new AuthenticationException("잘못된 이메일 및 패스워드입니다."));
 
-        if (!encoder.matches(loginRequest.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             throw new AuthenticationException("잘못된 이메일 및 패스워드입니다.");
         }
 
@@ -47,8 +48,19 @@ public class AuthenticatorService implements Authenticator {
 
     private TokenResult issueAccessAndRefreshToken(UserLoginRequest loginRequest, User user) {
         Instant now = Instant.now();
-        IssuedToken accessToken = tokenProvider.createAccessToken(new Email(loginRequest.email()), loginRequest.deviceId(), now);
-        IssuedToken rawRefreshToken = tokenProvider.createRefreshToken(new Email(loginRequest.email()), loginRequest.deviceId(), now);
+        IssuedToken accessToken = tokenProvider.createAccessToken(
+                new Email(loginRequest.email()),
+                user.getRole().expand(),
+                loginRequest.deviceId(),
+                now
+        );
+
+        IssuedToken rawRefreshToken = tokenProvider.createRefreshToken(
+                new Email(loginRequest.email()),
+                user.getRole().expand(),
+                loginRequest.deviceId(),
+                now
+        );
         refreshStore.save(rawRefreshToken, user.getId());
         return new TokenResult(accessToken, rawRefreshToken);
 
@@ -77,13 +89,28 @@ public class AuthenticatorService implements Authenticator {
     @Override
     @Transactional
     public void logout(String rawRefreshToken) {
-        
+
         try {
             RefreshToken refreshToken = refreshStore.validate(rawRefreshToken);
             refreshToken.revoke(LocalDateTime.now());
         } catch (InvalidTokenException e) {
             log.warn(e.getMessage());
         }
+
+    }
+
+    @Override
+    @Transactional
+    public void delete(Email email, UserDeleteRequestDto deleteRequestDto, String refreshToken) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AuthenticationException("유저 정보가 일치하지 않습니다."));
+
+        if (!passwordEncoder.matches(deleteRequestDto.password(), user.getPassword())) {
+            throw new AuthenticationException("유저 정보가 일치하지 않습니다.");
+        }
+
+        user.delete(LocalDateTime.now());
+        refreshStore.deleteAllByUserId(user.getId(), LocalDateTime.now());
 
     }
 }

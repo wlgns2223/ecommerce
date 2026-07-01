@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.required;
 
-public interface Encoder {
+public interface PasswordEncoder {
 
     String encode(CharSequence rawPassword);
 

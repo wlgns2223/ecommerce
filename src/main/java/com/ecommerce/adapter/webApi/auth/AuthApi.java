@@ -6,11 +6,13 @@ import com.ecommerce.adapter.webApi.user.mapper.UserMapper;
 import com.ecommerce.application.auth.provided.Authenticator;
 import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.domain.auth.dto.IssuedToken;
+import com.ecommerce.domain.auth.dto.request.UserDeleteRequestDto;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
+import com.ecommerce.domain.user.vo.Email;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,6 +110,35 @@ public class AuthApi {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
         resolveRefreshCookie(request).ifPresent(authenticator::logout);
+
+        ResponseCookie access = ResponseCookie.from(ACCESS_COOKIE)
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        ResponseCookie refresh = ResponseCookie.from(REFRESH_COOKIE)
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, access.toString())
+                .header(HttpHeaders.SET_COOKIE, refresh.toString())
+                .build();
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Void> delete(@Valid @RequestBody UserDeleteRequestDto deleteRequestDto,
+                                       @AuthenticationPrincipal Email email,
+                                       HttpServletRequest request) {
+        resolveRefreshCookie(request)
+                .ifPresent((refreshToken) -> authenticator.delete(email, deleteRequestDto, refreshToken));
 
         ResponseCookie access = ResponseCookie.from(ACCESS_COOKIE)
                 .httpOnly(true)

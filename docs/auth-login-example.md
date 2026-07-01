@@ -106,7 +106,7 @@ import com.ecommerce.application.user.required.UserRepository;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.enums.Role;
 import com.ecommerce.domain.user.exception.InvalidCredentialsException;
-import com.ecommerce.domain.user.required.Encoder;
+import com.ecommerce.domain.user.required.PasswordEncoder;
 import com.ecommerce.domain.user.vo.Email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -120,19 +120,19 @@ import java.util.List;
 public class AuthService implements AuthUseCase {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenStore refreshTokenStore;
     private final long refreshTokenSeconds;
 
     // JwtTokenProvider와 동일하게 생성자 @Value 주입
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder encoder,
+                       PasswordEncoder passwordEncoder,
                        TokenProvider tokenProvider,
                        RefreshTokenStore refreshTokenStore,
                        @Value("${jwt.refresh-token-seconds}") long refreshTokenSeconds) {
         this.userRepository = userRepository;
-        this.encoder = encoder;
+        this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.refreshTokenStore = refreshTokenStore;
         this.refreshTokenSeconds = refreshTokenSeconds;
@@ -146,7 +146,7 @@ public class AuthService implements AuthUseCase {
                 .orElseThrow(() -> new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다."));
 
         // 2. 비밀번호 대조 (도메인 PasswordEncoder 포트)
-        if (!encoder.matches(rawPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
 

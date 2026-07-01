@@ -4,6 +4,7 @@ import com.ecommerce.domain.auth.entity.RefreshToken;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,5 +17,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     @Query("SELECT rt FROM RefreshToken rt WHERE rt.tokenHash = :hash AND rt.expiresAt > :now")
     Optional<RefreshToken> findByTokenHashAndExpiresAtAfterForUpdate(@Param("hash") String hash, @Param("now") LocalDateTime now);
 
-    Optional<RefreshToken> findByTokenHash(String tokenHash);
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE RefreshToken rt SET rt.revokedAt = :now WHERE rt.userId = :userId")
+    void deleteAllByUserId(@Param("userId") Long userId, @Param("now") LocalDateTime now);
 }

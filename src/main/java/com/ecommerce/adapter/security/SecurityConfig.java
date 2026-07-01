@@ -47,6 +47,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(SECURITY_EXCLUDE_PATHS).permitAll()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/**").hasRole("USER")
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception ->

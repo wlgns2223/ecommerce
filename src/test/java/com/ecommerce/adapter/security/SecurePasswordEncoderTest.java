@@ -1,17 +1,18 @@
 package com.ecommerce.adapter.security;
 
+import com.ecommerce.adapter.security.encoder.SecurePasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SecureEncoderTest {
+class SecurePasswordEncoderTest {
 
     @Test
     @DisplayName("인코딩된 패스워드가 일치한다")
     void matches() {
         // given
-        SecureEncoder encoder = new SecureEncoder();
+        SecurePasswordEncoder encoder = new SecurePasswordEncoder();
         String raw = "password";
 
         // when

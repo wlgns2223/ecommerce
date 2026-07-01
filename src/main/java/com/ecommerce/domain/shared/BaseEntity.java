@@ -15,7 +15,7 @@ import java.util.Objects;
 @Getter
 @MappedSuperclass
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class BaseEntity {
 
     @Id

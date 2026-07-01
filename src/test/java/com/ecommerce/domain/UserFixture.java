@@ -3,7 +3,7 @@ package com.ecommerce.domain;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.UserDetailFixture;
-import com.ecommerce.domain.user.required.Encoder;
+import com.ecommerce.domain.user.required.PasswordEncoder;
 
 public class UserFixture {
 
@@ -35,8 +35,8 @@ public class UserFixture {
         );
     }
 
-    public static Encoder createPasswordEncoder() {
-        return new Encoder() {
+    public static PasswordEncoder createPasswordEncoder() {
+        return new PasswordEncoder() {
             @Override
             public String encode(CharSequence rawPassword) {
                 return rawPassword.toString().toUpperCase();

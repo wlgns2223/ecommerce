@@ -42,4 +42,9 @@ public class RefreshStoreAdapter implements RefreshStore {
         return refreshTokenRepository.findByTokenHashAndExpiresAtAfterForUpdate(hashed, LocalDateTime.now())
                 .orElseThrow(() -> new InvalidTokenException("토큰을 찾을 수 없습니다."));
     }
+
+    @Override
+    public void deleteAllByUserId(Long userId, LocalDateTime now) {
+        refreshTokenRepository.deleteAllByUserId(userId, now);
+    }
 }

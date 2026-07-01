@@ -1,4 +1,4 @@
-package com.ecommerce.adapter.security;
+package com.ecommerce.adapter.security.encoder;
 
 import com.ecommerce.domain.auth.required.TokenHasher;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class HmacTokenEncoder implements TokenHasher {
 
     @Override
     public String hash(String raw) {
-        try{
+        try {
             Mac mac = Mac.getInstance(ALGO);
             mac.init(keySpec);
             byte[] digest = mac.doFinal(raw.getBytes(StandardCharsets.UTF_8));

@@ -5,7 +5,7 @@ import com.ecommerce.application.user.required.UserRepository;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.exception.DuplicatedEmailException;
-import com.ecommerce.domain.user.required.Encoder;
+import com.ecommerce.domain.user.required.PasswordEncoder;
 import com.ecommerce.domain.user.vo.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserRegisterService implements UserRegister {
 
     private final UserRepository userRepository;
-    private final Encoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -24,7 +24,7 @@ public class UserRegisterService implements UserRegister {
     public User register(UserRegisterRequest registerRequest) {
 
         checkDuplicateEmail(registerRequest);
-        User user = User.create(registerRequest, encoder);
+        User user = User.create(registerRequest, passwordEncoder);
         return userRepository.save(user);
     }
 
