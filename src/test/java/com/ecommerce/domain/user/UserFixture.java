@@ -1,4 +1,4 @@
-package com.ecommerce.domain;
+package com.ecommerce.domain.user;
 
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;

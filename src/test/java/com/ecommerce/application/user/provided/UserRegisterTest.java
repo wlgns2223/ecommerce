@@ -1,7 +1,7 @@
 package com.ecommerce.application.user.provided;
 
 import com.ecommerce.config.TestConfig;
-import com.ecommerce.domain.UserFixture;
+import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.enums.TierCode;

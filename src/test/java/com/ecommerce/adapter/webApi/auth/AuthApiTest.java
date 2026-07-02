@@ -2,7 +2,7 @@ package com.ecommerce.adapter.webApi.auth;
 
 import com.ecommerce.application.auth.provided.Authenticator;
 import com.ecommerce.config.TestContainerConfiguration;
-import com.ecommerce.domain.UserFixture;
+import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;

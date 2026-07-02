@@ -2,11 +2,11 @@ package com.ecommerce.application.auth.provided;
 
 import com.ecommerce.adapter.security.jwt.JwtTokenProvider;
 import com.ecommerce.application.user.provided.UserRegister;
-import com.ecommerce.domain.UserFixture;
 import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.auth.exception.TokenExpiredException;
+import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.vo.Email;

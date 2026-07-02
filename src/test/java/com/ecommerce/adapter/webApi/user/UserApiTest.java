@@ -1,6 +1,6 @@
 package com.ecommerce.adapter.webApi.user;
 
-import com.ecommerce.domain.UserFixture;
+import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

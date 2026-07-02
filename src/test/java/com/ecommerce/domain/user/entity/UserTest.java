@@ -1,6 +1,6 @@
 package com.ecommerce.domain.user.entity;
 
-import com.ecommerce.domain.UserFixture;
+import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.enums.UserStatus;
 import com.ecommerce.domain.user.required.PasswordEncoder;
