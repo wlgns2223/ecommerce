@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Import(TestContainerConfiguration.class)
 @Transactional
 @Profile("test")
-class CategoryManagementTest {
+class CategoryModifyTest {
 
     @Autowired
-    CategoryManagement categoryManagement;
+    CategoryModify categoryModify;
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -39,7 +39,7 @@ class CategoryManagementTest {
         CategoryCreateRequest categoryCreateRequest = CategoryFixture.createCategoryCreateRequest();
 
         // when
-        Category category = categoryManagement.create(categoryCreateRequest);
+        Category category = categoryModify.create(categoryCreateRequest);
 
         // then
         assertThat(category).isNotNull();
@@ -59,7 +59,7 @@ class CategoryManagementTest {
         categoryRepository.save(Category.create(categoryCreate));
 
         // then
-        assertThatThrownBy(() -> categoryManagement.create(request)).isInstanceOf(DuplicationSlugException.class);
+        assertThatThrownBy(() -> categoryModify.create(request)).isInstanceOf(DuplicationSlugException.class);
 
     }
 
@@ -77,7 +77,7 @@ class CategoryManagementTest {
         CategoryCreateRequest childrenRequest = CategoryFixture.createCategoryCreateRequest("children", parent.getId());
 
         //when
-        Category category = categoryManagement.create(childrenRequest);
+        Category category = categoryModify.create(childrenRequest);
 
         // then
         assertThat(category).isNotNull();
@@ -97,7 +97,7 @@ class CategoryManagementTest {
         CategoryCreateRequest childrenRequest = CategoryFixture.createCategoryCreateRequest("children", parent.getId());
 
         //when
-        Category category = categoryManagement.create(childrenRequest);
+        Category category = categoryModify.create(childrenRequest);
 
         // then
         assertThat(category).isNotNull();

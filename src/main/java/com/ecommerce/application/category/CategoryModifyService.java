@@ -1,6 +1,6 @@
 package com.ecommerce.application.category;
 
-import com.ecommerce.application.category.provided.CategoryManagement;
+import com.ecommerce.application.category.provided.CategoryModify;
 import com.ecommerce.application.category.required.CategoryRepository;
 import com.ecommerce.domain.category.dto.request.CategoryCreate;
 import com.ecommerce.domain.category.dto.request.CategoryCreateRequest;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements CategoryManagement {
+public class CategoryModifyService implements CategoryModify {
 
     private final CategoryRepository categoryRepository;
 
