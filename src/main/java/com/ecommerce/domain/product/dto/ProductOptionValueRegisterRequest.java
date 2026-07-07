@@ -1,4 +1,4 @@
-package com.ecommerce.domain.product.dto.request;
+package com.ecommerce.domain.product.dto;
 
 import jakarta.validation.constraints.NotNull;
 

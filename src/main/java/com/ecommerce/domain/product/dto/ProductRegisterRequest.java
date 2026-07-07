@@ -1,5 +1,6 @@
-package com.ecommerce.domain.product.dto.request;
+package com.ecommerce.domain.product.dto;
 
+import com.ecommerce.domain.product.entity.ProductCategory;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public record ProductRegisterRequest(
         @Positive @Min(0) int minOrderQty,
         @Positive @Max(9999) int maxOrderQty,
         @Positive int orderUnit,
-        @NotNull List<ProductOptionValueRegisterRequest> productOptionValueRegisterRequest
+        @NotEmpty List<ProductOptionValueRegisterRequest> productOptionValueRegisterRequest,
+        @NotEmpty List<ProductCategory> categories
 ) {
 }

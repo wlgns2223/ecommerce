@@ -62,4 +62,8 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductCategory> productCategories = new ArrayList<>();
+
+    public static Product create() {
+        return null;
+    }
 }
