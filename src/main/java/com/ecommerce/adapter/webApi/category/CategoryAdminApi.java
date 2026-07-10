@@ -1,10 +1,10 @@
 package com.ecommerce.adapter.webApi.category;
 
+import com.ecommerce.adapter.webApi.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.adapter.webApi.category.dto.response.CategoryResponse;
 import com.ecommerce.adapter.webApi.category.mapper.CategoryMapper;
 import com.ecommerce.adapter.webApi.common.ApiResponse;
 import com.ecommerce.application.category.provided.CategoryModify;
-import com.ecommerce.domain.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.domain.category.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

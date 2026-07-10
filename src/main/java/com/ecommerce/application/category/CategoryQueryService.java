@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryQueryService implements CategoryFinder {
@@ -20,5 +22,11 @@ public class CategoryQueryService implements CategoryFinder {
 
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다. id " + categoryId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsAll(List<Long> ids) {
+        return categoryRepository.existsAllByIdIn(ids);
     }
 }

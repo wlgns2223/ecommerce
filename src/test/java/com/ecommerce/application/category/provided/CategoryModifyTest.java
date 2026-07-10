@@ -1,11 +1,11 @@
 package com.ecommerce.application.category.provided;
 
+import com.ecommerce.adapter.webApi.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.application.category.required.CategoryRepository;
 import com.ecommerce.config.TestContainerConfiguration;
 import com.ecommerce.domain.category.CategoryFixture;
 import com.ecommerce.domain.category.Level;
 import com.ecommerce.domain.category.dto.request.CategoryCreate;
-import com.ecommerce.domain.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.domain.category.entity.Category;
 import com.ecommerce.domain.category.exception.DuplicationSlugException;
 import org.junit.jupiter.api.DisplayName;

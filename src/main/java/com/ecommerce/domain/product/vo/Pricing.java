@@ -3,6 +3,7 @@ package com.ecommerce.domain.product.vo;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +29,7 @@ public record Pricing(
     private static final int DECIMAL_SCALE = 2;
     private static final int HUNDRED = 100;
 
+    @Builder
     public Pricing {
         if (salePrice.amount().compareTo(retailPrice.amount()) > 0) {
             throw new IllegalArgumentException("판매가는 정가보다 클 수 없습니다.");

@@ -1,5 +1,6 @@
 package com.ecommerce.domain.product.entity;
 
+import com.ecommerce.domain.product.dto.ProductCreate;
 import com.ecommerce.domain.product.vo.SortOrder;
 import com.ecommerce.domain.shared.BaseEntity;
 import jakarta.persistence.*;
@@ -32,5 +33,16 @@ public class ProductOptionValue extends BaseEntity {
 
     @Embedded
     SortOrder sortOrder;
+
+    public static ProductOptionValue create(ProductCreate.OptionValueCreate optionValueCreate) {
+        ProductOptionValue productOptionValue = new ProductOptionValue();
+
+        productOptionValue.value = optionValueCreate.value();
+        productOptionValue.sortOrder = optionValueCreate.sortOrder();
+        productOptionValue.productOptionGroup = optionValueCreate.group();
+
+        return productOptionValue;
+
+    }
 
 }

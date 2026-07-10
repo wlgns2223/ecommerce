@@ -1,5 +1,6 @@
 package com.ecommerce.domain.product.entity;
 
+import com.ecommerce.domain.product.dto.ProductCreate;
 import com.ecommerce.domain.product.vo.SortOrder;
 import com.ecommerce.domain.shared.BaseEntity;
 import jakarta.persistence.*;
@@ -36,5 +37,15 @@ public class ProductCategory extends BaseEntity {
 
     @Embedded
     SortOrder sortOrder;
+
+    public static ProductCategory create(ProductCreate.ProductCategoryCreate productCategoryCreate, Product product) {
+        ProductCategory productCategoryEntity = new ProductCategory();
+        productCategoryEntity.categoryId = productCategoryCreate.categoryId();
+        productCategoryEntity.isPrimary = productCategoryCreate.isPrimary();
+        productCategoryEntity.sortOrder = productCategoryCreate.sortOrder();
+        productCategoryEntity.product = product;
+
+        return productCategoryEntity;
+    }
 
 }

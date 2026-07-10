@@ -1,6 +1,6 @@
 package com.ecommerce.domain.category;
 
-import com.ecommerce.domain.category.dto.request.CategoryCreateRequest;
+import com.ecommerce.adapter.webApi.category.dto.request.CategoryCreateRequest;
 
 public class CategoryFixture {
     public static CategoryCreateRequest createCategoryCreateRequest(String slug) {

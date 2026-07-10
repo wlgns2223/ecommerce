@@ -211,7 +211,7 @@ _Entity_
 
 - `name`: 이름
 - `sortOrder`: 정렬 순서
-- `optionValue`: `OptionValue` 옵션 값
+- `optionValueCreate`: `OptionValue` 옵션 값
 
 #### OptionValue
 

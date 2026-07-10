@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * SKU(Stock Keeping Unit) — 상품의 실제 판매·재고 관리 단위.
  *
@@ -69,5 +72,9 @@ public class ProductSku extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     Product product;
+
+    @OneToMany(mappedBy = "productSku", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<SkuOptionValue> skuOptionValues = new ArrayList<>();
+
 
 }

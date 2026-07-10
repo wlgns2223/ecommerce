@@ -2,6 +2,7 @@ package com.ecommerce.domain.product.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Builder;
 
 @Embeddable
 public record OrderQuantityPolicy(
@@ -17,7 +18,9 @@ public record OrderQuantityPolicy(
     private static final int MIN_QTY = 0;
     private static final int MAX_QTY = 9999;
 
+    @Builder
     public OrderQuantityPolicy {
+
         if (min < MIN_QTY) {
             throw new IllegalArgumentException("최소 주문 수량은 1 이상이어야합니다.");
         }
@@ -37,5 +40,7 @@ public record OrderQuantityPolicy(
         if (min % orderUnit != 0) {
             throw new IllegalArgumentException("최소 주문 수량은 주문 단위의 배수여야합니다.");
         }
+
+
     }
 }

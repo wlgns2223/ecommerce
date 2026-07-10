@@ -1,9 +1,9 @@
 package com.ecommerce.application.category;
 
+import com.ecommerce.adapter.webApi.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.application.category.provided.CategoryModify;
 import com.ecommerce.application.category.required.CategoryRepository;
 import com.ecommerce.domain.category.dto.request.CategoryCreate;
-import com.ecommerce.domain.category.dto.request.CategoryCreateRequest;
 import com.ecommerce.domain.category.entity.Category;
 import com.ecommerce.domain.category.exception.DuplicationSlugException;
 import com.ecommerce.domain.category.vo.Slug;

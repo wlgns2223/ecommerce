@@ -30,4 +30,13 @@ public class SkuOptionValue extends BaseEntity {
     @JoinColumn(name = "option_value_id", nullable = false)
     ProductOptionValue productOptionValue;
 
+    public static SkuOptionValue create(ProductSku productSku, ProductOptionValue productOptionValue) {
+        SkuOptionValue skuOptionValue = new SkuOptionValue();
+
+        skuOptionValue.productSku = productSku;
+        skuOptionValue.productOptionValue = productOptionValue;
+
+        return skuOptionValue;
+    }
+
 }
