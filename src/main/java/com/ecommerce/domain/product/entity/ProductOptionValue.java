@@ -34,12 +34,12 @@ public class ProductOptionValue extends BaseEntity {
     @Embedded
     SortOrder sortOrder;
 
-    public static ProductOptionValue create(ProductCreate.OptionValueCreate optionValueCreate) {
+    public static ProductOptionValue create(ProductCreate.OptionValueCreate optionValueCreate, ProductOptionGroup optionGroup) {
         ProductOptionValue productOptionValue = new ProductOptionValue();
 
         productOptionValue.value = optionValueCreate.value();
         productOptionValue.sortOrder = optionValueCreate.sortOrder();
-        productOptionValue.productOptionGroup = optionValueCreate.group();
+        productOptionValue.productOptionGroup = optionGroup;
 
         return productOptionValue;
 

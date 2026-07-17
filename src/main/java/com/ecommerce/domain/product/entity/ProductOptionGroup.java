@@ -46,14 +46,15 @@ public class ProductOptionGroup extends BaseEntity {
         productOptionGroup.name = optionGroupCreate.name();
         productOptionGroup.sortOrder = optionGroupCreate.sortOrder();
         productOptionGroup.product = product;
-        optionGroupCreate.optionValueCreates()
-                .forEach((dto) -> productOptionGroup
-                        .productOptionValues
-                        .add(ProductOptionValue.create(dto))
-                );
-
-
+        optionGroupCreate.optionValueCreates().forEach(productOptionGroup::addOptionValue);
+        
         return productOptionGroup;
+    }
+
+    public ProductOptionValue addOptionValue(ProductCreate.OptionValueCreate optionValueCreate) {
+        ProductOptionValue productOptionValue = ProductOptionValue.create(optionValueCreate, this);
+        this.productOptionValues.add(productOptionValue);
+        return productOptionValue;
     }
 
 }

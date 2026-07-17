@@ -6,6 +6,7 @@ import com.ecommerce.adapter.webApi.category.mapper.CategoryMapper;
 import com.ecommerce.adapter.webApi.common.ApiResponse;
 import com.ecommerce.application.category.provided.CategoryModify;
 import com.ecommerce.domain.category.entity.Category;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CategoryAdminApi {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApiResponse<CategoryResponse>> create(@RequestBody CategoryCreateRequest request) {
+    public ResponseEntity<ApiResponse<CategoryResponse>> create(@Valid @RequestBody CategoryCreateRequest request) {
         Category category = categoryModify.create(request);
         CategoryResponse response = categoryMapper.toResponse(category);
         URI location = URI.create("/api/category/" + response.id());

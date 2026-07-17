@@ -49,14 +49,14 @@ public class AuthenticatorService implements Authenticator {
     private TokenResult issueAccessAndRefreshToken(UserLoginRequest loginRequest, User user) {
         Instant now = Instant.now();
         IssuedToken accessToken = tokenProvider.createAccessToken(
-                new Email(loginRequest.email()),
+                user.getId(),
                 user.getRole().expand(),
                 loginRequest.deviceId(),
                 now
         );
 
         IssuedToken rawRefreshToken = tokenProvider.createRefreshToken(
-                new Email(loginRequest.email()),
+                user.getId(),
                 user.getRole().expand(),
                 loginRequest.deviceId(),
                 now
@@ -78,8 +78,8 @@ public class AuthenticatorService implements Authenticator {
         refreshToken.revoke(LocalDateTime.now());
 
         Instant now = Instant.now();
-        IssuedToken issuedAccessToken = tokenProvider.createAccessToken(parsed.email(), parsed.roles(), parsed.deviceId(), now);
-        IssuedToken issuedRefreshToken = tokenProvider.createRefreshToken(parsed.email(), parsed.roles(), parsed.deviceId(), now);
+        IssuedToken issuedAccessToken = tokenProvider.createAccessToken(parsed.id(), parsed.roles(), parsed.deviceId(), now);
+        IssuedToken issuedRefreshToken = tokenProvider.createRefreshToken(parsed.id(), parsed.roles(), parsed.deviceId(), now);
 
         refreshStore.save(issuedRefreshToken, refreshToken.getUserId());
 
@@ -101,8 +101,8 @@ public class AuthenticatorService implements Authenticator {
 
     @Override
     @Transactional
-    public void delete(Email email, UserDeleteRequestDto deleteRequestDto, String refreshToken) {
-        User user = userRepository.findByEmail(email)
+    public void delete(Long id, UserDeleteRequestDto deleteRequestDto, String refreshToken) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new AuthenticationException("유저 정보가 일치하지 않습니다."));
 
         if (!passwordEncoder.matches(deleteRequestDto.password(), user.getPassword())) {

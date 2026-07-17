@@ -4,6 +4,7 @@ import com.ecommerce.adapter.webApi.common.ApiResponse;
 import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.adapter.webApi.user.mapper.UserMapper;
 import com.ecommerce.application.auth.provided.Authenticator;
+import com.ecommerce.application.user.provided.UserAdminRegister;
 import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.dto.request.UserDeleteRequestDto;
@@ -12,21 +13,19 @@ import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
 import com.ecommerce.domain.user.entity.User;
-import com.ecommerce.domain.user.vo.Email;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -43,6 +42,16 @@ public class AuthApi {
 
     private static final String ACCESS_COOKIE = "access_token";
     private static final String REFRESH_COOKIE = "refresh_token";
+
+    private final UserAdminRegister userAdminRegister;
+
+    @PostMapping("/admin/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ApiResponse<UserResponse>> adminRegister(@Valid @RequestBody UserRegisterRequest request) {
+        User user = userAdminRegister.registerAdmin(request);
+        URI location = URI.create("/api/admin/" + user.getId());
+        return ResponseEntity.created(location).body(ApiResponse.ok(userMapper.toResponse(user)));
+    }
 
     @PostMapping("/register")
     public ApiResponse<UserResponse> register(@Valid @RequestBody UserRegisterRequest request) {
@@ -135,10 +144,10 @@ public class AuthApi {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> delete(@Valid @RequestBody UserDeleteRequestDto deleteRequestDto,
-                                       @AuthenticationPrincipal Email email,
+                                       @AuthenticationPrincipal Long id,
                                        HttpServletRequest request) {
         resolveRefreshCookie(request)
-                .ifPresent((refreshToken) -> authenticator.delete(email, deleteRequestDto, refreshToken));
+                .ifPresent((refreshToken) -> authenticator.delete(id, deleteRequestDto, refreshToken));
 
         ResponseCookie access = ResponseCookie.from(ACCESS_COOKIE)
                 .httpOnly(true)

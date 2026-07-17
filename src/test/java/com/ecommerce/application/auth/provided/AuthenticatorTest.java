@@ -9,7 +9,7 @@ import com.ecommerce.domain.auth.exception.TokenExpiredException;
 import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
 import com.ecommerce.domain.user.dto.UserRegisterRequest;
-import com.ecommerce.domain.user.vo.Email;
+import com.ecommerce.domain.user.entity.User;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ class AuthenticatorTest {
     void renewAccessToken() {
         // given
         IssuedToken issuedToken = jwtTokenProvider.createRefreshToken(
-                new Email("test@gmail.com"),
+                1L,
                 "device-1",
                 Instant.now().minus(Duration.ofDays(30))
         );
@@ -89,7 +89,7 @@ class AuthenticatorTest {
         // given
         String email = "test@gmail.com";
         UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email);
-        userRegister.register(registerRequest);
+        User user = userRegister.register(registerRequest);
         UserLoginRequest loginRequest = UserFixture.createLoginRequest(email);
         TokenResult loginResult = authenticator.login(loginRequest);
 
@@ -103,8 +103,8 @@ class AuthenticatorTest {
 
         IssuedToken issuedAccessToken = jwtTokenProvider.parseToken(result.access().token());
         IssuedToken issuedRefreshToken = jwtTokenProvider.parseToken(result.refresh().token());
-        assertThat(issuedAccessToken.email().address()).isEqualTo(email);
-        assertThat(issuedRefreshToken.email().address()).isEqualTo(email);
+        assertThat(issuedAccessToken.id()).isEqualTo(user.getId());
+        assertThat(issuedRefreshToken.id()).isEqualTo(user.getId());
 
     }
 

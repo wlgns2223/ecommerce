@@ -18,5 +18,5 @@ spring:
     access-token-seconds: 1800
     refresh-token-seconds: 1209600
     cookie:
-      access-name: access
-      refresh-name: refresh
+      access-name: access_token
+      refresh-name: refresh_token

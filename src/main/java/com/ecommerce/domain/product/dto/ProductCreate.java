@@ -1,13 +1,14 @@
 package com.ecommerce.domain.product.dto;
 
-import com.ecommerce.domain.product.entity.ProductOptionGroup;
 import com.ecommerce.domain.product.vo.ModelNumber;
 import com.ecommerce.domain.product.vo.OrderQuantityPolicy;
 import com.ecommerce.domain.product.vo.Pricing;
 import com.ecommerce.domain.product.vo.SortOrder;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record ProductCreate(
         String name,
         Pricing pricing,
@@ -33,14 +34,15 @@ public record ProductCreate(
         }
     }
 
+    @Builder
     public record OptionGroupCreate(
             String name,
             SortOrder sortOrder,
             List<OptionValueCreate> optionValueCreates) {
     }
 
+    @Builder
     public record OptionValueCreate(
-            ProductOptionGroup group,
             String value,
             SortOrder sortOrder) {
     }
@@ -51,6 +53,7 @@ public record ProductCreate(
             SortOrder sortOrder) {
     }
 
+    @Builder
     public record ProductCategoriesCreate(
             Long primaryCategoryId,
             List<Long> secondaryCategoryIds

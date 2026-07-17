@@ -6,7 +6,6 @@ import com.ecommerce.domain.auth.enums.TokenType;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.auth.exception.TokenExpiredException;
 import com.ecommerce.domain.user.enums.Role;
-import com.ecommerce.domain.user.vo.Email;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -43,17 +42,17 @@ public class JwtTokenProvider implements TokenProvider {
         this.refreshTokenSeconds = refreshTokenSeconds;
     }
 
-    public IssuedToken createAccessToken(Email email, String deviceId, Instant now) {
-        return createAccessToken(email, List.of(Role.USER), deviceId, now);
+    public IssuedToken createAccessToken(Long id, String deviceId, Instant now) {
+        return createAccessToken(id, List.of(Role.USER), deviceId, now);
     }
 
-    public IssuedToken createAccessToken(Email email, List<Role> roles, String deviceId, Instant now) {
+    public IssuedToken createAccessToken(Long id, List<Role> roles, String deviceId, Instant now) {
 
         long accessTokenMilliSeconds = accessTokenSeconds * ONE_SECOND_IN_MILLI;
         Date expiry = new Date(Date.from(now).getTime() + accessTokenMilliSeconds);
         String token = Jwts.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(email.address())
+                .subject(id.toString())
                 .claim(TOKEN_TYPE, TokenType.ACCESS.name())
                 .claim(ROLES, roles)
                 .claim(DEVICE_ID, deviceId)
@@ -63,7 +62,7 @@ public class JwtTokenProvider implements TokenProvider {
                 .compact();
 
         return IssuedToken.builder()
-                .email(email)
+                .id(id)
                 .roles(roles)
                 .tokenType(TokenType.ACCESS)
                 .deviceId(deviceId)
@@ -73,12 +72,12 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public IssuedToken createRefreshToken(Email email, List<Role> roles, String deviceId, Instant now) {
+    public IssuedToken createRefreshToken(Long id, List<Role> roles, String deviceId, Instant now) {
         long refreshTokenMilliSeconds = refreshTokenSeconds * ONE_SECOND_IN_MILLI;
         Date expiry = new Date(Date.from(now).getTime() + refreshTokenMilliSeconds);
         String token = Jwts.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(email.address())
+                .subject(id.toString())
                 .claim(TOKEN_TYPE, TokenType.REFRESH.name())
                 .claim(ROLES, roles)
                 .claim(DEVICE_ID, deviceId)
@@ -88,7 +87,7 @@ public class JwtTokenProvider implements TokenProvider {
                 .compact();
 
         return IssuedToken.builder()
-                .email(email)
+                .id(id)
                 .token(token)
                 .roles(roles)
                 .deviceId(deviceId)
@@ -97,8 +96,8 @@ public class JwtTokenProvider implements TokenProvider {
                 .build();
     }
 
-    public IssuedToken createRefreshToken(Email email, String deviceId, Instant now) {
-        return createRefreshToken(email, List.of(Role.USER), deviceId, now);
+    public IssuedToken createRefreshToken(Long id, String deviceId, Instant now) {
+        return createRefreshToken(id, List.of(Role.USER), deviceId, now);
     }
 
     public IssuedToken parseToken(String token) {
@@ -106,7 +105,7 @@ public class JwtTokenProvider implements TokenProvider {
             Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             List<String> roleNames = claims.get(ROLES, List.class);
             return IssuedToken.builder()
-                    .email(new Email(claims.getSubject()))
+                    .id(Long.valueOf(claims.getSubject()))
                     .tokenType(TokenType.valueOf(claims.get(TOKEN_TYPE, String.class)))
                     .deviceId(claims.get(DEVICE_ID, String.class))
                     .roles(roleNames.stream().map(Role::valueOf).toList())

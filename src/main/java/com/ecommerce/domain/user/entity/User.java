@@ -69,6 +69,10 @@ public class User extends BaseEntity {
     }
 
     public static User create(UserRegisterRequest request, PasswordEncoder passwordEncoder) {
+        return create(request, Role.USER, passwordEncoder);
+    }
+
+    public static User create(UserRegisterRequest request, Role role, PasswordEncoder passwordEncoder) {
         String rawPassword = requireNonNull(request.password());
         validatePassword(rawPassword);
 
@@ -78,7 +82,7 @@ public class User extends BaseEntity {
         user.nickname = new Nickname(requireNonNull(request.nickname()));
         user.phone = new Phone(requireNonNull(request.phone()));
         user.status = UserStatus.ACTIVE;
-        user.role = Role.USER;
+        user.role = role;
         user.detail = UserDetail.createUserDetail(request.detailCreateRequest());
         return user;
     }
