@@ -10,7 +10,7 @@ import com.ecommerce.domain.category.CategoryFixture;
 import com.ecommerce.domain.product.entity.ProductFixture;
 import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +48,7 @@ class ProductAdminApiTest {
     @DisplayName("product create api")
     void create() throws JsonProcessingException, UnsupportedEncodingException {
         // given
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest("admin@gmail.com");
+        UserRegister registerRequest = UserFixture.createUserRegister("admin@gmail.com");
         ApiResponse<UserResponse> userResponseApiResponse = registerUser(registerRequest);
         MvcTestResult loginResult = doLogin(registerRequest);
         ApiResponse<CategoryResponse> categoryResponse = createTestCategory(loginResult);
@@ -72,7 +72,7 @@ class ProductAdminApiTest {
 
     }
 
-    private @NotNull ApiResponse<UserResponse> registerUser(UserRegisterRequest registerRequest) throws JsonProcessingException, UnsupportedEncodingException {
+    private @NotNull ApiResponse<UserResponse> registerUser(UserRegister registerRequest) throws JsonProcessingException, UnsupportedEncodingException {
 
         String registerRequestJson = objectMapper.writeValueAsString(registerRequest);
         MvcTestResult registrationResponse = mockMvcTester.post().uri("/api/auth/admin/register")
@@ -85,7 +85,7 @@ class ProductAdminApiTest {
                 });
     }
 
-    private @NotNull MvcTestResult doLogin(UserRegisterRequest registerRequest) throws JsonProcessingException {
+    private @NotNull MvcTestResult doLogin(UserRegister registerRequest) throws JsonProcessingException {
         UserLoginRequest loginRequest = UserFixture.createLoginRequest(registerRequest.email(), registerRequest.password());
         String loginRequestJson = objectMapper.writeValueAsString(loginRequest);
 

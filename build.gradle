@@ -7,6 +7,8 @@ plugins {
 group = 'final'
 version = '0.0.1-SNAPSHOT'
 
+def querydslVersion = "7.0"
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -32,6 +34,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation("io.github.openfeign.querydsl:querydsl-core:${querydslVersion}")
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:$querydslVersion")
 
 
     compileOnly 'org.projectlombok:lombok'
@@ -42,6 +46,7 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+    annotationProcessor("io.github.openfeign.querydsl:querydsl-apt:$querydslVersion:jpa")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -52,6 +57,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+
 }
 
 dependencyManagement {

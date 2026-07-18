@@ -29,4 +29,16 @@ public class CategoryQueryService implements CategoryFinder {
     public boolean existsAll(List<Long> ids) {
         return categoryRepository.existsAllByIdIn(ids);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> findSelfAndDescendantIds(Long rootId) {
+        return categoryRepository.findSelfAndDescendantIds(rootId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return categoryRepository.existsById(id);
+    }
 }

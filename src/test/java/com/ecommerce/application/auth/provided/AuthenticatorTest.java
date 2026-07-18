@@ -1,14 +1,13 @@
 package com.ecommerce.application.auth.provided;
 
 import com.ecommerce.adapter.security.jwt.JwtTokenProvider;
-import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.auth.exception.TokenExpiredException;
 import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.User;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +32,7 @@ class AuthenticatorTest {
     Authenticator authenticator;
 
     @Autowired
-    UserRegister userRegister;
+    com.ecommerce.application.user.provided.UserRegister userRegister;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -46,7 +45,7 @@ class AuthenticatorTest {
     void login() {
         // given
         String email = "test@gmail.com";
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email);
+        UserRegister registerRequest = UserFixture.createUserRegister(email);
         userRegister.register(registerRequest);
         UserLoginRequest request = UserFixture.createLoginRequest(email);
 
@@ -88,7 +87,7 @@ class AuthenticatorTest {
     void renew() {
         // given
         String email = "test@gmail.com";
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email);
+        UserRegister registerRequest = UserFixture.createUserRegister(email);
         User user = userRegister.register(registerRequest);
         UserLoginRequest loginRequest = UserFixture.createLoginRequest(email);
         TokenResult loginResult = authenticator.login(loginRequest);

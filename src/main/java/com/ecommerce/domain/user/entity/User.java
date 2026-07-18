@@ -1,7 +1,7 @@
 package com.ecommerce.domain.user.entity;
 
 import com.ecommerce.domain.shared.BaseEntity;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.enums.Role;
 import com.ecommerce.domain.user.enums.UserStatus;
 import com.ecommerce.domain.user.required.PasswordEncoder;
@@ -68,11 +68,11 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public static User create(UserRegisterRequest request, PasswordEncoder passwordEncoder) {
+    public static User create(UserRegister request, PasswordEncoder passwordEncoder) {
         return create(request, Role.USER, passwordEncoder);
     }
 
-    public static User create(UserRegisterRequest request, Role role, PasswordEncoder passwordEncoder) {
+    public static User create(UserRegister request, Role role, PasswordEncoder passwordEncoder) {
         String rawPassword = requireNonNull(request.password());
         validatePassword(rawPassword);
 

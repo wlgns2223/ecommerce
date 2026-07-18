@@ -4,7 +4,7 @@ import com.ecommerce.application.auth.provided.Authenticator;
 import com.ecommerce.config.TestContainerConfiguration;
 import com.ecommerce.domain.user.UserFixture;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
@@ -43,7 +43,7 @@ class AuthApiTest {
     @DisplayName("register api")
     void register() throws JsonProcessingException {
         // given
-        UserRegisterRequest request = UserFixture.createUserRegisterRequest("foo@email.com");
+        UserRegister request = UserFixture.createUserRegister("foo@email.com");
         String requestJson = objectMapper.writeValueAsString(request);
 
         // when
@@ -69,7 +69,7 @@ class AuthApiTest {
         // given
         String email = "test@gmail.com";
         String password = "password";
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email, password);
+        UserRegister registerRequest = UserFixture.createUserRegister(email, password);
         String registerRequestJson = objectMapper.writeValueAsString(registerRequest);
 
         mockMvcTester.post().uri("/api/auth/register")
@@ -100,7 +100,7 @@ class AuthApiTest {
         String password = "password";
 
         // 회원 등록
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email, password);
+        UserRegister registerRequest = UserFixture.createUserRegister(email, password);
         String registerRequestJson = objectMapper.writeValueAsString(registerRequest);
         mockMvcTester.post().uri("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +156,7 @@ class AuthApiTest {
         String password = "password";
 
         // 회원 등록
-        UserRegisterRequest registerRequest = UserFixture.createUserRegisterRequest(email, password);
+        UserRegister registerRequest = UserFixture.createUserRegister(email, password);
         String registerRequestJson = objectMapper.writeValueAsString(registerRequest);
         mockMvcTester.post().uri("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)

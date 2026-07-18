@@ -5,13 +5,12 @@ import com.ecommerce.adapter.webApi.user.dto.UserResponse;
 import com.ecommerce.adapter.webApi.user.mapper.UserMapper;
 import com.ecommerce.application.auth.provided.Authenticator;
 import com.ecommerce.application.user.provided.UserAdminRegister;
-import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.domain.auth.dto.IssuedToken;
 import com.ecommerce.domain.auth.dto.request.UserDeleteRequestDto;
 import com.ecommerce.domain.auth.dto.response.TokenResult;
 import com.ecommerce.domain.auth.exception.InvalidTokenException;
 import com.ecommerce.domain.user.dto.UserLoginRequest;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +35,7 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class AuthApi {
 
-    final UserRegister userRegister;
+    final com.ecommerce.application.user.provided.UserRegister userRegister;
     final UserMapper userMapper;
     final Authenticator authenticator;
 
@@ -47,14 +46,14 @@ public class AuthApi {
 
     @PostMapping("/admin/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApiResponse<UserResponse>> adminRegister(@Valid @RequestBody UserRegisterRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> adminRegister(@Valid @RequestBody UserRegister request) {
         User user = userAdminRegister.registerAdmin(request);
         URI location = URI.create("/api/admin/" + user.getId());
         return ResponseEntity.created(location).body(ApiResponse.ok(userMapper.toResponse(user)));
     }
 
     @PostMapping("/register")
-    public ApiResponse<UserResponse> register(@Valid @RequestBody UserRegisterRequest request) {
+    public ApiResponse<UserResponse> register(@Valid @RequestBody UserRegister request) {
         User user = userRegister.register(request);
         return ApiResponse.ok(userMapper.toResponse(user));
     }

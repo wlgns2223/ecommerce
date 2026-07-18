@@ -114,4 +114,8 @@ public class Product extends BaseEntity {
             order += 1;
         }
     }
+
+    public void markOnSale(){
+        this.status = ProductStatus.ON_SALE;
+    }
 }

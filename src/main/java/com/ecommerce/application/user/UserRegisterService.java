@@ -1,8 +1,7 @@
 package com.ecommerce.application.user;
 
-import com.ecommerce.application.user.provided.UserRegister;
 import com.ecommerce.application.user.required.UserRepository;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.exception.DuplicatedEmailException;
 import com.ecommerce.domain.user.required.PasswordEncoder;
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserRegisterService implements UserRegister {
+public class UserRegisterService implements com.ecommerce.application.user.provided.UserRegister {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -21,14 +20,14 @@ public class UserRegisterService implements UserRegister {
 
     @Override
     @Transactional
-    public User register(UserRegisterRequest registerRequest) {
+    public User register(UserRegister registerRequest) {
 
         checkDuplicateEmail(registerRequest);
         User user = User.create(registerRequest, passwordEncoder);
         return userRepository.save(user);
     }
 
-    private void checkDuplicateEmail(UserRegisterRequest registerRequest) {
+    private void checkDuplicateEmail(UserRegister registerRequest) {
         if (userRepository.existsByEmail(new Email(registerRequest.email()))) {
             throw new DuplicatedEmailException("이메일: " + registerRequest.email());
         }

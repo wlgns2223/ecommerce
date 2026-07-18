@@ -2,7 +2,7 @@ package com.ecommerce.application.user.provided;
 
 import com.ecommerce.config.TestConfig;
 import com.ecommerce.domain.user.UserFixture;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.enums.TierCode;
 import com.ecommerce.domain.user.enums.UserStatus;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserRegisterTest {
 
     @Autowired
-    UserRegister userRegister;
+    com.ecommerce.application.user.provided.UserRegister userRegister;
 
     @Autowired
     EntityManager entityManager;
@@ -43,7 +43,7 @@ class UserRegisterTest {
         String password = "password";
 
         // when
-        User user = userRegister.register(UserFixture.createUserRegisterRequest(email, password));
+        User user = userRegister.register(UserFixture.createUserRegister(email, password));
 
         //then
         assertThat(user.getId()).isNotNull();
@@ -57,10 +57,10 @@ class UserRegisterTest {
     void duplicateEmailFail() {
         // given
         String email = "test@gmail.com";
-        userRegister.register(UserFixture.createUserRegisterRequest(email));
+        userRegister.register(UserFixture.createUserRegister(email));
 
         // then
-        assertThatThrownBy(() -> userRegister.register(UserFixture.createUserRegisterRequest(email)))
+        assertThatThrownBy(() -> userRegister.register(UserFixture.createUserRegister(email)))
                 .isInstanceOf(DuplicatedEmailException.class);
 
     }
@@ -70,7 +70,7 @@ class UserRegisterTest {
     void wrongPassword() {
         // given
         String password = "";
-        UserRegisterRequest request = UserFixture.createUserRegisterRequest("test@gmail.com", password);
+        UserRegister request = UserFixture.createUserRegister("test@gmail.com", password);
 
         // then
         assertThatThrownBy(() -> userRegister.register(request))
@@ -83,7 +83,7 @@ class UserRegisterTest {
     void wrongEmail() {
         // given
         String email = "1234";
-        UserRegisterRequest request = UserFixture.createUserRegisterRequest(email);
+        UserRegister request = UserFixture.createUserRegister(email);
 
         // then
         assertThatThrownBy(() -> userRegister.register(request))

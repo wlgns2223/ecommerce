@@ -1,19 +1,31 @@
 package com.ecommerce.adapter.webApi.product.dto.response;
 
 import com.ecommerce.domain.product.enums.ProductStatus;
-import com.ecommerce.domain.product.vo.Money;
-import com.ecommerce.domain.product.vo.SortOrder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProductResponse(
 
-        Long id, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, String name,
-        Money pricingSalePrice, Money pricingRetailPrice, String description, String modelNumberValue, Long sellerId,
-        String saleUnit, int orderQuantityPolicyMin, int orderQuantityPolicyMax, int orderQuantityPolicyOrderUnit,
-        ProductStatus status, List<ProductCategoryDto> productCategories,
-        List<ProductOptionGroupDto> productOptionGroups) {
+        Long id,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        LocalDateTime deletedAt,
+        String name,
+        String description,
+        String modelNumberValue,
+        BigDecimal pricingSalePriceAmount,
+        BigDecimal pricingRetailPriceAmount,
+        Long sellerId,
+        String saleUnit,
+        int orderQuantityPolicyMin,
+        int orderQuantityPolicyMax,
+        int orderQuantityPolicyOrderUnit,
+        ProductStatus status,
+        List<ProductCategoryDto> productCategories,
+        List<ProductOptionGroupDto> productOptionGroups
+) {
     /**
      * DTO for {@link com.ecommerce.domain.product.entity.ProductCategory}
      */
@@ -37,8 +49,7 @@ public record ProductResponse(
             LocalDateTime deletedAt,
             List<ProductOptionValueDto> productOptionValues,
             String name,
-            SortOrder sortOrder
-    ) {
+            int sortOrderValue) {
     }
 
     /**
@@ -50,7 +61,6 @@ public record ProductResponse(
             LocalDateTime updatedAt,
             LocalDateTime deletedAt,
             String value,
-            SortOrder sortOrder
-    ) {
+            int sortOrderValue) {
     }
 }

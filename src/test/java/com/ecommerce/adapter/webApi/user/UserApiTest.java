@@ -1,7 +1,7 @@
 package com.ecommerce.adapter.webApi.user;
 
 import com.ecommerce.domain.user.UserFixture;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +32,7 @@ class UserApiTest {
     @DisplayName("회원가입을 한다.")
     void register() throws JsonProcessingException {
         // given
-        UserRegisterRequest request = UserFixture.createUserRegisterRequest("foo@gmail.com");
+        UserRegister request = UserFixture.createUserRegister("foo@gmail.com");
 
         // when
         MvcTestResult result = mockMvcTester.post().uri("/api/auth/register")

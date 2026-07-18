@@ -49,7 +49,7 @@ class ProductModifyTest {
     @DisplayName("option없는 product를 생성한다.")
     void createWithoutOptions() {
         // given
-        User user = userRegister.register(UserFixture.createUserRegisterRequest("test@gmail.com"));
+        User user = userRegister.register(UserFixture.createUserRegister("test@gmail.com"));
         Category category = categoryModify.create(CategoryFixture.createCategoryCreateRequest());
         ProductCreate productCreate = ProductFixture.createProductWithoutOption(user.getId(), category.getId());
 
@@ -65,7 +65,7 @@ class ProductModifyTest {
     @DisplayName("Option이 잆는 Product를 생성한다.")
     void createWithOptions() {
         // given
-        User user = userRegister.register(UserFixture.createUserRegisterRequest("test@gmail.com"));
+        User user = userRegister.register(UserFixture.createUserRegister("test@gmail.com"));
         Category category = categoryModify.create(CategoryFixture.createCategoryCreateRequest());
         ProductCreate productCreate = ProductFixture.createProductWithOptions(user.getId(), category.getId());
 

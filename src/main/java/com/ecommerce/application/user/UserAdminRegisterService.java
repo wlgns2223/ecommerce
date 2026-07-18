@@ -2,7 +2,7 @@ package com.ecommerce.application.user;
 
 import com.ecommerce.application.user.provided.UserAdminRegister;
 import com.ecommerce.application.user.required.UserRepository;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.User;
 import com.ecommerce.domain.user.enums.Role;
 import com.ecommerce.domain.user.exception.DuplicatedEmailException;
@@ -21,13 +21,13 @@ public class UserAdminRegisterService implements UserAdminRegister {
 
     @Override
     @Transactional
-    public User registerAdmin(UserRegisterRequest registerRequest) {
+    public User registerAdmin(UserRegister registerRequest) {
         checkDuplicateEmail(registerRequest);
         User user = User.create(registerRequest, Role.ADMIN, passwordEncoder);
         return userRepository.save(user);
     }
 
-    private void checkDuplicateEmail(UserRegisterRequest registerRequest) {
+    private void checkDuplicateEmail(UserRegister registerRequest) {
         if (userRepository.existsByEmail(new Email(registerRequest.email()))) {
             throw new DuplicatedEmailException("이메일: " + registerRequest.email());
         }

@@ -1,7 +1,7 @@
 package com.ecommerce.domain.user;
 
 import com.ecommerce.domain.user.dto.UserLoginRequest;
-import com.ecommerce.domain.user.dto.UserRegisterRequest;
+import com.ecommerce.domain.user.dto.UserRegister;
 import com.ecommerce.domain.user.entity.UserDetailFixture;
 import com.ecommerce.domain.user.required.PasswordEncoder;
 
@@ -17,8 +17,8 @@ public class UserFixture {
         return new UserLoginRequest(email, password, "device-1");
     }
 
-    public static UserRegisterRequest createUserRegisterRequest(String email) {
-        return new UserRegisterRequest(email,
+    public static UserRegister createUserRegister(String email) {
+        return new UserRegister(email,
                 PASSWORD,
                 "foo",
                 "01012341234",
@@ -26,8 +26,8 @@ public class UserFixture {
         );
     }
 
-    public static UserRegisterRequest createUserRegisterRequest(String email, String password) {
-        return new UserRegisterRequest(email,
+    public static UserRegister createUserRegister(String email, String password) {
+        return new UserRegister(email,
                 password,
                 "foo",
                 "01012341234",

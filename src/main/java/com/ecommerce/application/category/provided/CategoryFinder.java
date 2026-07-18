@@ -9,4 +9,8 @@ public interface CategoryFinder {
     Category find(Long categoryId);
 
     boolean existsAll(List<Long> ids);
+
+    boolean existsById(Long id);
+
+    List<Long> findSelfAndDescendantIds(Long rootId);
 }
