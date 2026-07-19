@@ -1,12 +1,12 @@
 package com.ecommerce.application.product;
 
 import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
-import com.ecommerce.application.category.provided.CategoryFinder;
 import com.ecommerce.application.product.provided.ProductFinder;
 import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.required.CategoryChecker;
 import com.ecommerce.application.product.required.ProductListRepository;
 import com.ecommerce.application.product.required.ProductRepository;
-import com.ecommerce.application.user.provided.UserFinder;
+import com.ecommerce.application.product.required.UserChecker;
 import com.ecommerce.domain.product.entity.Product;
 import com.ecommerce.domain.product.enums.ProductStatus;
 import com.ecommerce.domain.shared.exception.NotFoundException;
@@ -22,8 +22,9 @@ public class ProductService implements ProductFinder {
 
     private final ProductRepository productRepository;
     private final ProductListRepository productListRepository;
-    private final CategoryFinder categoryFinder;
-    private final UserFinder userFinder;
+
+    private final CategoryChecker categoryChecker;
+    private final UserChecker userChecker;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,11 +36,11 @@ public class ProductService implements ProductFinder {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductSummary> searchProducts(ProductSearchCondition searchCondition, Pageable pageable) {
-        if (searchCondition.categoryId() != null && !categoryFinder.existsById(searchCondition.categoryId())) {
+        if (searchCondition.categoryId() != null && !categoryChecker.existsById(searchCondition.categoryId())) {
             throw new NotFoundException("존재하지 않는 카테고리입니다.");
         }
 
-        if (searchCondition.sellerId() != null && !userFinder.existsById(searchCondition.sellerId())) {
+        if (searchCondition.sellerId() != null && !userChecker.existsById(searchCondition.sellerId())) {
             throw new NotFoundException("존재하지 않는 판매자 입니다.");
         }
 

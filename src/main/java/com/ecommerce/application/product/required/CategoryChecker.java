@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface CategoryChecker {
     boolean existsAll(List<Long> ids);
+
+    boolean existsById(Long id);
 }
