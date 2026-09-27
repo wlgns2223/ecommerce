@@ -3,7 +3,7 @@ package com.ecommerce.adapter.persistence.product;
 import com.ecommerce.adapter.persistence.querydsl.support.QuerydslSortSupport;
 import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
 import com.ecommerce.adapter.webApi.product.dto.response.QProductSummary;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.application.product.required.CategoryHierarchyReader;
 import com.ecommerce.application.product.required.ProductListRepository;
 import com.ecommerce.domain.product.entity.QProduct;
@@ -15,7 +15,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.ecommerce.domain.product.entity.QProductCategory.productCategory;
 

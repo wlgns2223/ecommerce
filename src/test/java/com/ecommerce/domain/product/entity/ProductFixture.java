@@ -1,7 +1,7 @@
 package com.ecommerce.domain.product.entity;
 
 import com.ecommerce.adapter.webApi.product.dto.request.ProductCreateRequest;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.domain.product.dto.ProductCreate;
 import com.ecommerce.domain.product.vo.*;
 

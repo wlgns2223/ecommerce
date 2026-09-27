@@ -1,5 +1,6 @@
 package com.ecommerce.domain.product.entity;
 
+import com.ecommerce.domain.product.dto.ProductSkuCreate;
 import com.ecommerce.domain.product.vo.Money;
 import com.ecommerce.domain.product.vo.SkuCode;
 import com.ecommerce.domain.product.vo.Stock;
@@ -75,6 +76,16 @@ public class ProductSku extends BaseEntity {
 
     @OneToMany(mappedBy = "productSku", cascade = CascadeType.ALL, orphanRemoval = true)
     List<SkuOptionValue> skuOptionValues = new ArrayList<>();
+
+    public static ProductSku create(ProductSkuCreate skuCreate) {
+        ProductSku sku = new ProductSku();
+        sku.skuCode = skuCreate.skuCode();
+        sku.price = skuCreate.price();
+        sku.stock = skuCreate.stock();
+        sku.product = skuCreate.product();
+        sku.skuOptionValues = new ArrayList<>(skuCreate.skuOptionValues());
+        return sku;
+    }
 
 
 }

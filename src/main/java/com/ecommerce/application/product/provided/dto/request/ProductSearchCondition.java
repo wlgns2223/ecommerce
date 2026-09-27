@@ -1,4 +1,4 @@
-package com.ecommerce.application.product.provided.dto;
+package com.ecommerce.application.product.provided.dto.request;
 
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;

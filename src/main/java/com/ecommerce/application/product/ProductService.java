@@ -2,7 +2,7 @@ package com.ecommerce.application.product;
 
 import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
 import com.ecommerce.application.product.provided.ProductFinder;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.application.product.required.CategoryChecker;
 import com.ecommerce.application.product.required.ProductListRepository;
 import com.ecommerce.application.product.required.ProductRepository;

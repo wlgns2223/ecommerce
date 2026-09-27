@@ -3,7 +3,7 @@ package com.ecommerce.adapter.webApi.product;
 import com.ecommerce.adapter.webApi.common.ApiResponse;
 import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
 import com.ecommerce.adapter.webApi.shared.dto.response.PageResponse;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.config.TestConfig;
 import com.ecommerce.config.TestContainerConfiguration;
 import com.ecommerce.domain.category.CategoryFixture;

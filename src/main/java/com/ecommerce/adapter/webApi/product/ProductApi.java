@@ -6,7 +6,7 @@ import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
 import com.ecommerce.adapter.webApi.product.mapper.ProductMapper;
 import com.ecommerce.adapter.webApi.shared.dto.response.PageResponse;
 import com.ecommerce.application.product.provided.ProductFinder;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.domain.product.entity.Product;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

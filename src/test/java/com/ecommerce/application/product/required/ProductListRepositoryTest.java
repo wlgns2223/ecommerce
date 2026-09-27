@@ -5,7 +5,7 @@ import com.ecommerce.adapter.persistence.product.ProductListRepositoryAdapter;
 import com.ecommerce.adapter.persistence.querydsl.config.QueryDslConfig;
 import com.ecommerce.adapter.webApi.product.dto.response.ProductSummary;
 import com.ecommerce.application.category.CategoryQueryService;
-import com.ecommerce.application.product.provided.dto.ProductSearchCondition;
+import com.ecommerce.application.product.provided.dto.request.ProductSearchCondition;
 import com.ecommerce.config.TestContainerConfiguration;
 import com.ecommerce.domain.category.CategoryFixture;
 import com.ecommerce.domain.category.dto.request.CategoryCreate;
