@@ -24,8 +24,8 @@ public class ProductApi {
     private final ProductMapper productMapper;
 
     @GetMapping("/{id}")
-    public ApiResponse<ProductResponse> findById(@PathVariable Long id) {
-        Product product = productFinder.findById(id);
+    public ApiResponse<ProductResponse> getOnSaleProduct(@PathVariable Long id) {
+        Product product = productFinder.getOnSaleProduct(id);
         return ApiResponse.ok(productMapper.toResponse(product));
     }
 

@@ -27,10 +27,9 @@ public class ProductService implements ProductFinder {
     private final UserChecker userChecker;
 
     @Override
-    @Transactional(readOnly = true)
-    public Product findById(Long productId) {
+    public Product getOnSaleProduct(Long productId) {
         return productRepository.findByIdAndStatus(productId, ProductStatus.ON_SALE)
-                .orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다. id: " + productId));
+                .orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다. product id: " + productId));
     }
 
     @Override

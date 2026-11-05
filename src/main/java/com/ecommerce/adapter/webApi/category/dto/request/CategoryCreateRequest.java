@@ -11,13 +11,6 @@ public record CategoryCreateRequest(
         Long parentId
 ) {
 
-    public CategoryCreateRequest(@NotNull String name, @NotBlank String slug, @NotNull @Positive Integer level, Long parentId) {
-        this.name = name;
-        this.slug = slug;
-        this.level = level;
-        this.parentId = parentId;
-    }
-
     public CategoryCreateRequest(String name, String slug, Integer level) {
         this(name, slug, level, null);
     }

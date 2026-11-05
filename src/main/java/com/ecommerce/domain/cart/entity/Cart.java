@@ -22,7 +22,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "carts")
-@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE carts SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class Cart extends BaseEntity {
 
@@ -31,4 +31,10 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     List<CartItem> cartItems = new ArrayList<>();
+
+    public static Cart create(User user){
+        Cart cart = new Cart();
+        cart.user = user;
+        return cart;
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductFinder {
-    Product findById(Long productId);
+    Product getOnSaleProduct(Long productId);
 
     Page<ProductSummary> searchProducts(ProductSearchCondition searchCondition, Pageable pageable);
 }

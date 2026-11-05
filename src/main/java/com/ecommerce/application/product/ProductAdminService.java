@@ -3,6 +3,7 @@ package com.ecommerce.application.product;
 import com.ecommerce.application.product.provided.ProductModify;
 import com.ecommerce.application.product.required.CategoryChecker;
 import com.ecommerce.application.product.required.ProductAdminRepository;
+import com.ecommerce.application.product.required.ProductOptionValueRepository;
 import com.ecommerce.application.product.required.UserChecker;
 import com.ecommerce.domain.product.dto.ProductCreate;
 import com.ecommerce.domain.product.entity.Product;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ProductAdminService implements ProductModify {
 
     private final ProductAdminRepository productAdminRepository;
+    private final ProductOptionValueRepository productOptionValueRepository;
     private final CategoryChecker categoryChecker;
     private final UserChecker userChecker;
 
@@ -42,10 +44,9 @@ public class ProductAdminService implements ProductModify {
     }
 
     @NonNull
-    private static List<Long> getCategoryIds(ProductCreate productCreate) {
+    private List<Long> getCategoryIds(ProductCreate productCreate) {
         List<Long> ids = new ArrayList<>(productCreate.productCategoryCreate().secondaryCategoryIds());
         ids.add(productCreate.productCategoryCreate().primaryCategoryId());
         return ids;
     }
-
 }

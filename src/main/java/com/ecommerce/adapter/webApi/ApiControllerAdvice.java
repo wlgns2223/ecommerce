@@ -1,6 +1,7 @@
 package com.ecommerce.adapter.webApi;
 
 import com.ecommerce.domain.auth.exception.AuthenticationException;
+import com.ecommerce.domain.shared.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,11 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ProblemDetail handleAuthenticationException(AuthenticationException e) {
         return getProblemDetail(HttpStatus.UNAUTHORIZED, e);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ProblemDetail handleNotFoundException(NotFoundException e){
+        return getProblemDetail(HttpStatus.NOT_FOUND, e);
     }
 
     private static ProblemDetail getProblemDetail(HttpStatus status, Exception e) {

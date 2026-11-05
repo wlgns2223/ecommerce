@@ -22,12 +22,12 @@ import java.math.BigDecimal;
 @DynamicUpdate
 @Table(name = "cart_items",
         uniqueConstraints = {
-        @UniqueConstraint(
-                name = "uk_cart_items",
-                columnNames = {"cart_id","sku_id"}
-        )
-})
-@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+                @UniqueConstraint(
+                        name = "uk_cart_items",
+                        columnNames = {"cart_id", "sku_id"}
+                )
+        })
+@SQLDelete(sql = "UPDATE cart_items SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class CartItem extends BaseEntity {
 

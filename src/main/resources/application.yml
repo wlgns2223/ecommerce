@@ -3,7 +3,7 @@ spring:
     name: ecommerce
 
   datasource:
-    url: jdbc:mysql://localhost:3306/ecommerce
+    url: jdbc:mysql://localhost:3307/ecommerce
     username: study
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver

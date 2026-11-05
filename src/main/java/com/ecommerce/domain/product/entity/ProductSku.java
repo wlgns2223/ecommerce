@@ -87,5 +87,9 @@ public class ProductSku extends BaseEntity {
         return sku;
     }
 
+    public Money getSalePrice(){
+        return this.price != null ? price : product.getPricing().salePrice();
+    }
+
 
 }
