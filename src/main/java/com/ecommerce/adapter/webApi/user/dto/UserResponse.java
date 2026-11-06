@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 public record UserResponse(
         Long id,
         String email,
-        String password,
         String nickname,
         String phone,
         UserStatus status,
         UserDetail detail,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        LocalDateTime deletedAt
+
 ) {
 }

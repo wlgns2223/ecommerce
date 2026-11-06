@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @MappedSuperclass
 @ToString
 @FieldDefaults(level = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Id

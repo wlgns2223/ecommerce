@@ -36,6 +36,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     implementation("io.github.openfeign.querydsl:querydsl-core:${querydslVersion}")
     implementation("io.github.openfeign.querydsl:querydsl-jpa:$querydslVersion")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
 
 
     compileOnly 'org.projectlombok:lombok'

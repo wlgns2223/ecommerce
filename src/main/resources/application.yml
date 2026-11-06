@@ -20,3 +20,10 @@ spring:
     cookie:
       access-name: access_token
       refresh-name: refresh_token
+
+springdoc:
+  default-produces-media-type: application/json
+
+  swagger-ui:
+    csrf:
+      enabled: true

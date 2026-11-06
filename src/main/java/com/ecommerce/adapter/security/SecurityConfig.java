@@ -37,6 +37,7 @@ public class SecurityConfig {
 
         http.csrf((csrf) -> {
                     CsrfTokenRequestAttributeHandler handler = new CsrfTokenRequestAttributeHandler();
+                    handler.setCsrfRequestAttributeName(null);
                     csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                             .csrfTokenRequestHandler(handler)
                             .ignoringRequestMatchers("/api/auth/**");

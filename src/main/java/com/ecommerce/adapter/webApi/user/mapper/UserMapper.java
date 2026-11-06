@@ -11,6 +11,5 @@ public interface UserMapper {
     @Mapping(target = "email", source = "email.address")
     @Mapping(target = "nickname", source = "nickname.value")
     @Mapping(target = "phone", source = "phone.value")
-    @Mapping(target = "password", ignore = true)
     UserResponse toResponse(User user);
 }
